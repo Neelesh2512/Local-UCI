@@ -19,7 +19,7 @@ const FontSizeChanger = dynamic(
   { ssr: false }
 );
 
-const App = (props:any): any => {
+const App: React.FC<null> = (): any => {
 
     const initialState: {
       messages: any[];
@@ -227,12 +227,7 @@ const App = (props:any): any => {
             <h3>Chakshu Gautam</h3>
           </div>
           <div className="font-change">
-        <FontSizeChanger 
-          targets={['.chat-message','.chat-choices','.chat-error-message']}
-          options={{
-            stepSize: 2,
-            range: 4
-          }}
+        {/* <FontSizeChanger    
           customButtons={{
             up: <span style={{'fontSize': '15px', cursor: 'zoom-in'}}>A+</span>,
             down: <span style={{'fontSize': '15px', cursor: 'zoom-out'}}>A-</span>,
@@ -248,7 +243,14 @@ const App = (props:any): any => {
             },
             buttonsMargin: 20
           }}
-          />
+          options={{
+            stepSize: 2,
+            range: 4
+          }}
+          targets={['.chat-message', '.chat-choices', '.chat-error-message']} 
+          
+          
+          />  */}
         </div>
           <SecNavbar />
           <div className="chat__header--right">
