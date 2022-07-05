@@ -19,7 +19,7 @@ const FontSizeChanger = dynamic(
   { ssr: false }
 );
 
-const App: React.FC<null> = (): any => {
+const App = (prop: any): any => {
 
     const initialState: {
       messages: any[];
