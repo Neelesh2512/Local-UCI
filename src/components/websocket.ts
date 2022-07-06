@@ -5,17 +5,17 @@ import {io} from 'socket.io-client';
 //     : "localhost:3005";
 
 
-export const socket = io(`ws://143.110.183.73:3013`);
-export const send = (msg: any, session: any, media: any) =>
+export const socket = io(`${process.env.NEXT_PUBLIC_TRANSPORT_SOCKET_URL}`);
+export const send = (msg: any, session: any, accessToken: any) =>
   socket.emit("botRequest", {
     content: {
       text: msg,
-      media: media,
       userId: session.userID,
       appId: "appId",
       channel: "diksha",
       from: session.socketID,
       context: null,
+      accessToken: accessToken,
     },
     to: "admin",
   });

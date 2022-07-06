@@ -25,12 +25,9 @@
 }
 
 body {
-  margin: 0;
-  font-family: Mulish-regular !important;
-  background-color: rgb(255, 255, 255);
+  font-family: Mulish-regular;
   transition: opacity 200ms;
   position: relative;
-  font-family: Mulish-medium;
   scroll-behavior: smooth;
 }
 
@@ -66,7 +63,6 @@ a {
   width: auto !important;
   font-weight: 500;
   margin-left: 25px;
-  background-color: #ffffff;
 }
 .chat-message::before {
   content: "";
@@ -88,18 +84,8 @@ a {
 .chat-reciever::before {
   content: "";
 }
-.chat-body {
-  /* opacity: 0; */
-  width: 100%;
-  margin-top: 40px;
-  min-height: 90vh;
-  background-color: #ffffff;
-  padding: 0px 20px;
-  padding-bottom: 98px !important;
-  transition: opacity 200ms;
-  position: relative;
-  font-family: Mulish-medium;
-}
+
+
 .Toastify__toast-container{
   top: 50px;
 }
@@ -108,13 +94,13 @@ a {
     width: 100%;
   }
 }
-.chat-footer {
+/* .chat-footer {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0.5rem;
-}
+} */
 .chat-choices {
   font-size: 0.9rem;
   padding: 10px;
@@ -128,7 +114,7 @@ a {
 }
 .chat-choices-container {
   margin-left: 15px;
-  display: inline-flex;
+  display: flex;
   flex-wrap: wrap;
 }
 .chat-error-message {
@@ -146,7 +132,6 @@ a {
   font-weight: 500;
   margin-left: 25px;
   margin-bottom: 1rem;
-  background-color: #ffffff;
 }
 .chat-error-message::before {
   content: "";
@@ -157,63 +142,14 @@ a {
   height: 0;
   content: url("../assets/images/robot.png");
 }
-.chat-body-container {
-  flex: 1;
-  background-repeat: repeat;
-  background-position: center;
-  overflow: scroll;
-  background-color: #ffffff;
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  position: relative;
-}
+
 .chat-body-container::-webkit-scrollbar {
   display: none;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-.chat-header {
-  padding: 10px;
-  padding-right: 0px;
-  padding-left: 12px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #fff;
-  background-image: url("../assets/images/sidebar.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-color: #000080;
-  background-blend-mode: multiply;
-  color: white;
-  z-index: 5;
-  position: fixed;
-  width: 100%;
-}
-.chat__header--info {
-  flex: 1;
-  margin-left: 8px;
-}
 
-.chat__header--info > h3 {
-  font-size: 15px;
-  font-weight: 500;
-  margin-bottom: 3px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  width: 200px;
-}
 
-.chat__header--right {
-  display: flex;
-  justify-content: space-between;
-  min-width: 50px;
-}
-
-.chat__header--right > .MuiButtonBase-root {
-  padding: 12px;
-}
 .chat__footer {
   display: flex;
   justify-content: center;
@@ -238,7 +174,6 @@ a {
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background: #06d755;
   box-shadow: 0px 0px 2px 0px #0000005e;
   border: none;
   transition: transform 150ms;
@@ -256,18 +191,6 @@ a {
   outline: none;
 }
 
-.send__btn svg {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-}
-
-.send__btn svg:nth-child(1) {
-  opacity: 0;
-  transform: translateX(-48%) translateY(-50%);
-}
-
 .chat__footer > .MuiSvgIcon-root {
   color: gray;
   box-sizing: content-box;
@@ -281,7 +204,8 @@ a {
   font-size: 15px;
   margin-right: 10px;
   padding-right: 20px;
-  box-shadow: 0px 0px 2px 0px #0000003b;
+  box-shadow: 0px 0px 10px 0px #0000003b;
+  box-shadow: 0px 0px 15px 0px #0000003b;
   font-family: Roboto, sans-serif;
   transition: all 300ms;
   width: calc(100% - 150px);
@@ -297,25 +221,19 @@ a {
   font-family: Mulish-regular;
 }
 
-.app__body {
-  background-image: linear-gradient(to right, #f5f5f5, #fdfdfda1);
-  background-repeat: no-repeat;
-  background-size: cover;
-  display: flex;
-  height: 100%;
-  width: 100%;
-  box-shadow: -1px 4px 20px 6px rgb(0 0 0 / 20%);
-  overflow: hidden;
-  position: relative;
-}
-::-webkit-scrollbar {
+/*  */
+
+
+::-webkit-scrollbar { 
   width: 10px;
+  scrollbar-color: #180e644d;
 }
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 5px #180e644d;
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #000080;
+  background: #030311;
   border-radius: 10px;
 }
+

@@ -5,17 +5,16 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "noImplicitAny": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "jsx": "preserve",
-    "strictNullChecks": false,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "jsx": "preserve",
     "incremental": true,
-    "noImplicitAny": false,
     "lib": [
       "dom",
       "dom.iterable",
@@ -26,7 +25,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/components/App.jsx"  ],
+, "src/pages/camera.js"  ],
   "exclude": [
     "node_modules"
   ]

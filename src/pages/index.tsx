@@ -3,28 +3,35 @@ import { useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import App from "../components/App";
+import RecentChats from "../components/RecentChats";
 import React from "react";
 // import * as serviceWorker from "../utils/serviceWorker";
-import { ColorModeScript } from "@chakra-ui/react";
+import { CookiesProvider } from "react-cookie";
+import { ColorModeScript, Flex, Box } from "@chakra-ui/react";
 import { startWebsocketConnection } from "../components/websocket";
 
 const Home: NextPage = () => {
   return (
     <React.StrictMode>
       <Head>
-        <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+        <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
         <meta
           name="description"
           content="Web site created using create-react-app"
         />
-        
-        <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
         <title>UCI PWA</title>
       </Head>
-      <ColorModeScript />
-      <App />
+      <CookiesProvider>
+        <Flex>
+          <RecentChats />
+          
+          <App />
+        </Flex>
+
+        <ColorModeScript />
+      </CookiesProvider>
     </React.StrictMode>
   );
 };
