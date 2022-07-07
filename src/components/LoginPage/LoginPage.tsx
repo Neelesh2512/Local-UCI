@@ -28,7 +28,7 @@ const LoginPage: React.FC = () => {
       alert("Enter a 10 digit number");
     } else {
       fetch(
-        `${process.env.NEXT_PUBLIC_OTP_BASE_URL}uci/sendOTP?phone=${input}`,
+        `http://143.110.183.73:3089/uci/sendOTP?phone=${input}`,
         { method: "GET" }
       ).then((response) => {
         if (response.status === 200) {
