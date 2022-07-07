@@ -5,7 +5,7 @@ import {io} from 'socket.io-client';
 //     : "localhost:3005";
 
 
-export const socket = io(`${process.env.NEXT_PUBLIC_TRANSPORT_SOCKET_URL}`);
+export const socket = io(`ws://143.110.183.73:3013`);
 export const send = (msg: any, session: any, accessToken: any) =>
   socket.emit("botRequest", {
     content: {
