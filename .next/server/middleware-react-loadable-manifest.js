@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST={"../components/App.tsx -> react-font-size-changer":{id:6131,files:["static/chunks/131.2597ade3475b5ab8.js"]}};
+self.__REACT_LOADABLE_MANIFEST={}

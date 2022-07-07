@@ -50,7 +50,7 @@ const ChatSection: React.FC<chatSectionProps> = ({ toShowSettings }) => {
       </Box>
 
       {/* Profile Section */}
-      <Box flex="8">
+      <Box flex="8" className="profile-section">
         <ChatItem image="url('/killua.jpg')" name="Neelesh" />
         <ChatItem image="url('/killua.jpg')" name="Chakshu" />
         <ChatItem image="url('/killua.jpg')" name="Shruti" />
