@@ -1,6 +1,8 @@
 import { useRef, useEffect, MutableRefObject } from "react";
 import styles from "./index.module.css";
 import { Text, Box, Flex, Spacer, Button, useColorModeValue } from "@chakra-ui/react";
+import { Link } from '@chakra-ui/react'
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 
 interface messageProps {
   text: any,
@@ -10,18 +12,30 @@ interface messageProps {
   data: any
 }
 
-const Message: React.FC<messageProps> = ({
+const Message = ({
   text,
   username,
   self,
   choices,
-  data
+  data,
+  location,
+  image,
+  caption,
+  audio,
+  video,
+  doc,
 }: {
   text: any;
   username: string;
   self: boolean;
   choices: any;
   data: any;
+  location: any;
+  image: any;
+  caption: string;
+  audio: any;
+  video: any;
+  doc: any;
 }) => {
   // Theme toggle Settings
   const box_color = useColorModeValue("#06d755","#202C33");
@@ -34,7 +48,39 @@ const Message: React.FC<messageProps> = ({
           <Spacer />
           <Box borderColor="white" color={text_color} bgColor={box_color} className="chat-message chat-reciever">
             <Box  className={styles.message_username}><Text fontSize='md' fontWeight='bold'>{username}</Text></Box>
-            <Box style={{ whiteSpace: "pre-wrap" }}>{text}</Box>
+            {(!image && !audio && !video && !doc && !location) && 
+                <div style={{ whiteSpace: "pre-wrap" }}>{text}</div>
+            }
+            {location &&
+             <div style={{ whiteSpace: "pre-wrap",  }}>
+              <a href={`https://www.google.com/maps?q=${location.latitude},${location.longitude}+&output=embed`} target="blank" style={{color: "White"}}> 
+                <iframe src={`https://www.google.com/maps?q=${location.latitude},${location.longitude}+&output=embed`}/>
+              </a>
+              </div>
+            }
+              {image &&
+                <div style={{ whiteSpace: "pre-wrap" }}><img src={image} style={{maxWidth: "300px"}}/></div>
+              } 
+              {audio &&
+                <audio controls>
+                  <source src={audio}/>
+                  Your browser does not support the audio element.
+                </audio>
+              }
+              {video &&
+                <video width="320" height="240" controls>
+                  <source src={video}/>
+                  Your browser does not support the video tag.
+              </video>
+              } 
+              {doc &&
+                <Button colorScheme='blackAlpha' padding="10px" marginTop='10px'>
+                  <Link href={doc} isExternal>
+                    Click to open this file <ExternalLinkIcon mx='2px' />
+                  </Link>
+                </Button>
+              }
+            {/* <Box style={{ whiteSpace: "pre-wrap" }}>{text}</Box> */}
           </Box>
         </>
       )}
@@ -52,7 +98,32 @@ const Message: React.FC<messageProps> = ({
               }
               >
               <Box className={styles.message_username}><Text fontSize='md' fontWeight='bold'>{username}</Text></Box>
-              <Box fontWeight="thin" style={{ whiteSpace: "pre-wrap" }}>{text}</Box>
+              {(!image && !audio && !video && !doc) && 
+                <div style={{ whiteSpace: "pre-wrap" }}>{text}</div>
+              }
+              {image &&
+                <div style={{ whiteSpace: "pre-wrap" }}><img src={image} style={{maxWidth: "300px"}}/></div>
+              } 
+              {audio &&
+                <audio controls>
+                  <source src={audio}/>
+                  Your browser does not support the audio element.
+                </audio>
+              }
+              {video &&
+                <video width="320" height="240" controls>
+                  <source src={video} />
+                  Your browser does not support the video tag.
+              </video>
+              } 
+              {doc &&
+                <Button colorScheme='blackAlpha' padding="10px" marginTop='10px'>
+                  <Link href={doc} isExternal>
+                    Click to open this file <ExternalLinkIcon mx='2px' />
+                  </Link>
+                </Button>
+              } 
+              <div style={{ whiteSpace: "pre-wrap" }}>{caption}</div>
             </Box>
             {choices && choices.length > 0 && (
               <Box className="chat-choices-container">
@@ -100,6 +171,12 @@ const MessageWindow: React.FC<messageWindowProps> = (props) => {
             self={username === msg.username}
             choices={msg.choices}
             data={props.selected}
+            location={msg.location}
+            image={msg.image}
+            caption={msg.caption}
+            audio={msg.audio}
+            video={msg.video}
+            doc={msg.doc}
             />
             );
           })}

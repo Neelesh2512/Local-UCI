@@ -6,7 +6,7 @@ import {io} from 'socket.io-client';
 
 
 export const socket = io(`ws://143.110.183.73:3013`);
-export const send = (msg: any, session: any, accessToken: any) =>
+export const send = (msg: any, session: any, accessToken: any, media: any) =>
   socket.emit("botRequest", {
     content: {
       text: msg,
@@ -16,6 +16,7 @@ export const send = (msg: any, session: any, accessToken: any) =>
       from: session.socketID,
       context: null,
       accessToken: accessToken,
+      media: media
     },
     to: "admin",
   });
