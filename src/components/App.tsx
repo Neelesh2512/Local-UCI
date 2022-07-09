@@ -7,8 +7,9 @@ import {
 import MessageWindow from "./MessageWindow";
 import Profile from "./Profile";
 import TextBar from "./TextBar";
-import { useColorModeValue, Box, Flex, Text, Spacer } from "@chakra-ui/react";
-
+import { useColorModeValue, Box, Flex, Text, Spacer, interactivity } from "@chakra-ui/react";
+import { io } from "socket.io-client";
+import { startWebsocketConnection } from "./websocket";
 import Notification from "./Notifications";
 import { useCookies, withCookies } from "react-cookie";
 import { useRouter } from "next/router";
@@ -17,7 +18,11 @@ import { SessionState } from "http2";
 // import darkImage from "../../public/dark_back.png";
 // import lightImage from "../../public/dark_back.jpg";
 
-const App: React.FC = () => {
+interface appProps {
+  currentUser: {name: string, number: string | null}
+}
+
+const App: React.FC<appProps>= ({currentUser}) => {
   // Router for Navigation
   const router = useRouter();
 
@@ -25,7 +30,9 @@ const App: React.FC = () => {
   const [accessToken, setAccessToken] = useState("");
   const [isVerified, setIsVerified] = useState(false);
   const [cookies, setCookies] = useCookies();
-
+  const [socket, setSocket] = useState<any>(null);
+  
+  const [profileName,setProfileName] = useState("");
   // For showing the Profile
   const [profileOpen, setProfileOpen] = useState(false);
 
@@ -44,7 +51,7 @@ const App: React.FC = () => {
     session: any;
   } = {
     messages: [],
-    username: "chaks",
+    username: "",
     session: {},
   };
 
@@ -53,6 +60,10 @@ const App: React.FC = () => {
   const scrollToBottom: () => void = () => {
     window.scrollTo(0, document.body.scrollHeight);
   };
+
+  useEffect(() => {
+    setState(initialState)
+  },[currentUser])
 
   useEffect(() => {
     if (cookies["access_token"] !== undefined) {
@@ -70,10 +81,23 @@ const App: React.FC = () => {
           throw err;
         });
       setAccessToken(cookies["access_token"]);
+      
+      
     } else {
       router.push("/login");
     }
+    
+    setSocket(io(`${process.env.NEXT_PUBLIC_TRANSPORT_SOCKET_URL}`,{query: {deviceId:`phone:${localStorage.getItem("phoneNumber")}`}}));
+    setProfileName(localStorage.getItem('profileName') || "")
   }, []);
+
+  useEffect(() => {
+    console.log(socket)
+    if (socket !== null ) {
+      startWebsocketConnection(socket);
+    }
+  },[socket])
+
 
   useEffect((): void => {
     if (router.query.state || cookies["access_token"] !== "") {
@@ -97,7 +121,8 @@ const App: React.FC = () => {
     setState({
       ...state,
       messages: state.messages.concat({
-        username: "UCI",
+        // username: msg.from.split(":")[1],
+        username: currentUser.name,
         text: msg.content.title,
         choices: msg.content.choices,
       }),
@@ -115,7 +140,7 @@ const App: React.FC = () => {
     if (!accessToken) {
       router.push("/login");
     } else {
-      send(text, state.session, accessToken);
+      send(text, state.session, accessToken,currentUser,socket);
       setState({
         ...state,
         messages: state.messages.concat({
@@ -153,6 +178,8 @@ const App: React.FC = () => {
     >
       {/* Heading */}
       <Flex
+        // cursor="pointer"
+        // onClick={showProfile}
         backgroundImage={"url('/sidebar.png')"}
         backgroundRepeat="no-repeat"
         backgroundSize="cover"
@@ -167,9 +194,7 @@ const App: React.FC = () => {
         zIndex="1"
       >
         <Box p="1rem" color={textColor}>
-          <Text fontSize="2xl" fontWeight="extrabold">
-            Chakshu Gautam
-          </Text>
+          <h1>{currentUser.name}</h1>
         </Box>
         <Spacer />
         <Flex
@@ -184,23 +209,26 @@ const App: React.FC = () => {
           <ColorModeSwitcher />
         </Flex>
       </Flex>
-        
-      
+
       {/* Chat Body Container */}
       <Box
-        className="chat-body-container"
+      bgImage={bgImg}
+        backgroundPosition="cover"
         flex="10"
         z-index="2"
-        overflow="scroll"
+       
         display="flex"
         justifyContent="center"
       >
         {/* Chat Body */}
         <Box
-          bgImage={bgImg}
+          
           p="0 1rem 2rem 1rem"
           transition="opacity 200ms"
           width="100%"
+          height="95vh"
+          paddingBottom="3rem"
+          overflow="scroll"
         >
           <MessageWindow
             messages={state.messages}
