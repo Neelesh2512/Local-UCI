@@ -7,11 +7,20 @@ import ChatItem from "./ChatItem";
 
 interface chatSectionProps {
   toShowSettings: (event: React.MouseEvent) => void;
+  toChangeCurrentUser: (name: string) => void;
+  allUsers: { name: string; number: string | null }[];
 }
 
-const ChatSection: React.FC<chatSectionProps> = ({ toShowSettings }) => {
+const ChatSection: React.FC<chatSectionProps> = ({
+  toShowSettings,
+  toChangeCurrentUser,
+  allUsers,
+}) => {
   const bg = useColorModeValue("#06d755", "#202C33");
 
+  const changingUser = (name: string) => {
+    toChangeCurrentUser(name);
+  };
   return (
     <Box className={styles.main__container}>
       {/* Settings Heading */}
@@ -50,10 +59,27 @@ const ChatSection: React.FC<chatSectionProps> = ({ toShowSettings }) => {
       </Box>
 
       {/* Profile Section */}
-      <Box flex="8" className="profile-section">
-        <ChatItem image="url('/killua.jpg')" name="Neelesh" />
-        <ChatItem image="url('/killua.jpg')" name="Chakshu" />
-        <ChatItem image="url('/killua.jpg')" name="Shruti" />
+      <Box flex="8">
+        <ChatItem
+          image="/neelesh.png"
+          name="Neelesh"
+          toChangeUser={changingUser}
+        />
+        <ChatItem
+          image="/chakshu.jpg"
+          name="Chakshu"
+          toChangeUser={changingUser}
+        />
+        <ChatItem
+          image="/shruti.png"
+          name="Shruti"
+          toChangeUser={changingUser}
+        />
+        {allUsers.map((user) => {
+          return (
+            <ChatItem image="" name={user.name} toChangeUser={changingUser} />
+          );
+        })}
       </Box>
     </Box>
   );

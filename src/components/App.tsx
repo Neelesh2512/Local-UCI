@@ -7,17 +7,39 @@ import {
 import MessageWindow from "./MessageWindow";
 import Profile from "./Profile";
 import TextBar from "./TextBar";
-import { useColorModeValue, Box, Flex, Text, Spacer } from "@chakra-ui/react";
-
+import {
+  useColorModeValue,
+  Box,
+  Flex,
+  Text,
+  Spacer,
+  interactivity,
+} from "@chakra-ui/react";
+import { io } from "socket.io-client";
+import { startWebsocketConnection } from "./websocket";
 import Notification from "./Notifications";
 import { useCookies, withCookies } from "react-cookie";
 import { useRouter } from "next/router";
 import ColorModeSwitcher from "./ColorModeSwitcher";
 import { SessionState } from "http2";
+import SecNavbar from "./SecNavbar";
+import dynamic from 'next/dynamic';
+
+
+const FontSizeChanger = dynamic(
+  () => {
+    return import("react-font-size-changer");
+  },
+  { ssr: false }
+);
 // import darkImage from "../../public/dark_back.png";
 // import lightImage from "../../public/dark_back.jpg";
 
-const App: React.FC = () => {
+interface appProps {
+  currentUser: { name: string; number: string | null };
+}
+
+const App: React.FC<appProps> = ({ currentUser }) => {
   // Router for Navigation
   const router = useRouter();
 
@@ -25,7 +47,9 @@ const App: React.FC = () => {
   const [accessToken, setAccessToken] = useState("");
   const [isVerified, setIsVerified] = useState(false);
   const [cookies, setCookies] = useCookies();
+  const [socket, setSocket] = useState<any>(null);
 
+  const [profileName, setProfileName] = useState("");
   // For showing the Profile
   const [profileOpen, setProfileOpen] = useState(false);
 
@@ -44,7 +68,7 @@ const App: React.FC = () => {
     session: any;
   } = {
     messages: [],
-    username: "chaks",
+    username: "",
     session: {},
   };
 
@@ -53,6 +77,10 @@ const App: React.FC = () => {
   const scrollToBottom: () => void = () => {
     window.scrollTo(0, document.body.scrollHeight);
   };
+
+  useEffect(() => {
+    setState(initialState);
+  }, [currentUser]);
 
   useEffect(() => {
     if (cookies["access_token"] !== undefined) {
@@ -73,7 +101,20 @@ const App: React.FC = () => {
     } else {
       router.push("/login");
     }
+
+    setSocket(
+      io(`${process.env.NEXT_PUBLIC_TRANSPORT_SOCKET_URL}`, {
+        query: { deviceId: `phone:${localStorage.getItem("phoneNumber")}` },
+      })
+    );
+    setProfileName(localStorage.getItem("profileName") || "");
   }, []);
+
+  useEffect(() => {
+    if (socket !== null) {
+      startWebsocketConnection(socket);
+    }
+  }, [socket]);
 
   useEffect((): void => {
     if (router.query.state || cookies["access_token"] !== "") {
@@ -94,14 +135,61 @@ const App: React.FC = () => {
   };
 
   const onMessageReceived = (msg: any): void => {
-    setState({
-      ...state,
-      messages: state.messages.concat({
-        username: "UCI",
-        text: msg.content.title,
-        choices: msg.content.choices,
-      }),
-    });
+    if (msg.content.msg_type === "IMAGE"){
+      setState({
+        ...state,
+        messages: state.messages.concat({
+          username: "UCI",
+          text: msg.content.title,
+          image: msg.content.media_url,
+          choices: msg.content.choices,
+          caption: msg.content.caption,
+        }),
+      });
+    }
+    else if (msg.content.msg_type === "AUDIO"){
+      setState({
+        ...state,
+        messages: state.messages.concat({
+          username: "UCI",
+          text: msg.content.title,
+          audio: msg.content.media_url,
+          choices: msg.content.choices,
+        }),
+      });
+    }
+    else if (msg.content.msg_type === "VIDEO"){
+      setState({
+        ...state,
+        messages: state.messages.concat({
+          username: "UCI",
+          text: msg.content.title,
+          video: msg.content.media_url,
+          choices: msg.content.choices,
+        }),
+      });
+    }
+    else if (msg.content.msg_type === "DOCUMENT"){
+      setState({
+        ...state,
+        messages: state.messages.concat({
+          username: "UCI",
+          text: msg.content.title,
+          doc: msg.content.media_url,
+          choices: msg.content.choices,
+        }),
+      });
+    }
+    else{
+      setState({
+        ...state,
+        messages: state.messages.concat({
+          username: "UCI",
+          text: msg.content.title,
+          choices: msg.content.choices,
+        }),
+      });
+    }
   };
 
   const setUserName = (name: string): void => {
@@ -111,34 +199,102 @@ const App: React.FC = () => {
     });
   };
 
-  const sendMessage = (text: string): void => {
+  const sendMessage = (text: string, media: any): void => {
     if (!accessToken) {
       router.push("/login");
     } else {
-      send(text, state.session, accessToken);
+      send(text, state.session, accessToken, currentUser, socket);
+      if(media){  
+        if (media.mimeType.slice(0,5) === "image"){
+          setState({
+            ...state,
+            messages: state.messages.concat({
+              username: state.username,
+              image: media.url
+            }),
+          });
+        }
+        else if (media.mimeType.slice(0,5) === "audio"){
+          setState({
+            ...state,
+            messages: state.messages.concat({
+              username: state.username,
+              audio: media.url
+            }),
+          });
+        }
+        else if (media.mimeType.slice(0,5) === "video"){
+          setState({
+            ...state,
+            messages: state.messages.concat({
+              username: state.username,
+              video: media.url,
+            }),
+          });
+        }
+        else if (media.mimeType.slice(0,11) === "application"){
+          setState({
+            ...state,
+            messages: state.messages.concat({
+              username: state.username,
+              doc: media.url,
+            }),
+          });
+        }else{
+          setState({
+            ...state,
+            messages: state.messages.concat({
+              username: state.username,
+              text: text,
+              doc: media.url
+            }),
+          });
+        }
+      }
+      else{
+        setState({
+          ...state,
+          messages: state.messages.concat({
+            username: state.username,
+            text: text,
+          }),
+        });
+      }
+    }
+  };
+
+  const sendLocation = (location: any): void => {
+    send(location,state.session, accessToken, currentUser, socket);
+    navigator.geolocation.getCurrentPosition((position: any) => {
       setState({
         ...state,
         messages: state.messages.concat({
           username: state.username,
-          text: text,
+          location: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          }
         }),
       });
-    }
-  };
+    })
+   
+}
 
   if (state.username === null) {
     console.log("Please set a username first");
     return (
       <div className="container">
         <div className="container-title">Enter username</div>
-        <TextBar onSend={setUserName} />
+        <TextBar onSend={setUserName} onSendLocation={sendLocation} />
       </div>
     );
   }
 
+  
+
   const selected = (option: any): void => {
     const toSend = option.key + " " + option.text;
-    sendMessage(toSend);
+    sendMessage(toSend, null);
   };
 
   const showProfile: () => void = (): void => {
@@ -167,9 +323,7 @@ const App: React.FC = () => {
         zIndex="1"
       >
         <Box p="1rem" color={textColor}>
-          <Text fontSize="2xl" fontWeight="extrabold">
-            Chakshu Gautam
-          </Text>
+          <h1>{currentUser.name}</h1>
         </Box>
         <Spacer />
         <Flex
@@ -181,26 +335,52 @@ const App: React.FC = () => {
             return false;
           }}
         >
+          <FontSizeChanger 
+          targets={['.chat-message','.chat-choices','.chat-error-message']}
+          options ={{
+            stepSize: 2,
+            range: 4
+          }}
+          customButtons={{
+            up: <span style={{'fontSize': '15px', cursor: 'zoom-in'}}>A+</span>,
+            down: <span style={{'fontSize': '15px', cursor: 'zoom-out'}}>A-</span>,
+            style: {
+              backgroundColor: '#000080',
+              color: 'white',
+              WebkitBoxSizing: 'border-box',
+              WebkitBorderRadius: '5px',
+              width: '40px',
+              height: '30px',
+              paddingBottom: '40px',
+              
+            },
+            buttonsMargin: 20
+          }}
+          />
+          <SecNavbar />
           <ColorModeSwitcher />
         </Flex>
       </Flex>
-        
-      
+
       {/* Chat Body Container */}
       <Box
-        className="chat-body-container"
+      bgImage={bgImg}
+        backgroundPosition="cover"
         flex="10"
         z-index="2"
-        overflow="scroll"
+        
         display="flex"
         justifyContent="center"
       >
         {/* Chat Body */}
         <Box
-          bgImage={bgImg}
           p="0 1rem 2rem 1rem"
           transition="opacity 200ms"
           width="100%"
+          height="95vh"
+          paddingBottom="3rem"
+          overflow="scroll"
+          className="chat-body"
         >
           <MessageWindow
             messages={state.messages}
@@ -209,7 +389,7 @@ const App: React.FC = () => {
           />
         </Box>
 
-        <TextBar onSend={sendMessage} />
+        <TextBar onSend={sendMessage} onSendLocation={sendLocation} />
       </Box>
     </Flex>
   );
