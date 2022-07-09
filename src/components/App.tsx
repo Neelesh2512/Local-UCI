@@ -14,8 +14,17 @@ import { useCookies, withCookies } from "react-cookie";
 import { useRouter } from "next/router";
 import ColorModeSwitcher from "./ColorModeSwitcher";
 import { SessionState } from "http2";
+import SecNavbar from "./SecNavbar";
 // import darkImage from "../../public/dark_back.png";
 // import lightImage from "../../public/dark_back.jpg";
+
+import dynamic from 'next/dynamic';
+const FontSizeChanger = dynamic(
+  () => {
+    return import("react-font-size-changer");
+  },
+  { ssr: false }
+);
 
 const App: React.FC = () => {
   // Router for Navigation
@@ -94,14 +103,61 @@ const App: React.FC = () => {
   };
 
   const onMessageReceived = (msg: any): void => {
-    setState({
-      ...state,
-      messages: state.messages.concat({
-        username: "UCI",
-        text: msg.content.title,
-        choices: msg.content.choices,
-      }),
-    });
+    if (msg.content.msg_type === "IMAGE"){
+      setState({
+        ...state,
+        messages: state.messages.concat({
+          username: "UCI",
+          text: msg.content.title,
+          image: msg.content.media_url,
+          choices: msg.content.choices,
+          caption: msg.content.caption,
+        }),
+      });
+    }
+    else if (msg.content.msg_type === "AUDIO"){
+      setState({
+        ...state,
+        messages: state.messages.concat({
+          username: "UCI",
+          text: msg.content.title,
+          audio: msg.content.media_url,
+          choices: msg.content.choices,
+        }),
+      });
+    }
+    else if (msg.content.msg_type === "VIDEO"){
+      setState({
+        ...state,
+        messages: state.messages.concat({
+          username: "UCI",
+          text: msg.content.title,
+          video: msg.content.media_url,
+          choices: msg.content.choices,
+        }),
+      });
+    }
+    else if (msg.content.msg_type === "DOCUMENT"){
+      setState({
+        ...state,
+        messages: state.messages.concat({
+          username: "UCI",
+          text: msg.content.title,
+          doc: msg.content.media_url,
+          choices: msg.content.choices,
+        }),
+      });
+    }
+    else{
+      setState({
+        ...state,
+        messages: state.messages.concat({
+          username: "UCI",
+          text: msg.content.title,
+          choices: msg.content.choices,
+        }),
+      });
+    }
   };
 
   const setUserName = (name: string): void => {
@@ -111,18 +167,67 @@ const App: React.FC = () => {
     });
   };
 
-  const sendMessage = (text: string): void => {
+  const sendMessage = (text: string, media: any): void => {
     if (!accessToken) {
       router.push("/login");
     } else {
-      send(text, state.session, accessToken);
-      setState({
-        ...state,
-        messages: state.messages.concat({
-          username: state.username,
-          text: text,
-        }),
-      });
+      send(text, state.session, accessToken, media);
+      if(media){  
+        if (media.mimeType.slice(0,5) === "image"){
+          setState({
+            ...state,
+            messages: state.messages.concat({
+              username: state.username,
+              image: media.url
+            }),
+          });
+        }
+        else if (media.mimeType.slice(0,5) === "audio"){
+          setState({
+            ...state,
+            messages: state.messages.concat({
+              username: state.username,
+              audio: media.url
+            }),
+          });
+        }
+        else if (media.mimeType.slice(0,5) === "video"){
+          setState({
+            ...state,
+            messages: state.messages.concat({
+              username: state.username,
+              video: media.url,
+            }),
+          });
+        }
+        else if (media.mimeType.slice(0,11) === "application"){
+          setState({
+            ...state,
+            messages: state.messages.concat({
+              username: state.username,
+              doc: media.url,
+            }),
+          });
+        }else{
+          setState({
+            ...state,
+            messages: state.messages.concat({
+              username: state.username,
+              text: text,
+              doc: media.url
+            }),
+          });
+        }
+      }
+      else{
+        setState({
+          ...state,
+          messages: state.messages.concat({
+            username: state.username,
+            text: text,
+          }),
+        });
+      }
     }
   };
 
@@ -136,9 +241,26 @@ const App: React.FC = () => {
     );
   }
 
+  const sendLocation = (location: any): void => {
+    send(location,state.session,null,null);
+    navigator.geolocation.getCurrentPosition((position: any) => {
+      setState({
+        ...state,
+        messages: state.messages.concat({
+          username: state.username,
+          location: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          }
+        }),
+      });
+    })
+   
+}
+
   const selected = (option: any): void => {
     const toSend = option.key + " " + option.text;
-    sendMessage(toSend);
+    sendMessage(toSend,null);
   };
 
   const showProfile: () => void = (): void => {
@@ -181,6 +303,32 @@ const App: React.FC = () => {
             return false;
           }}
         >
+        {/* Font Size Changer */}
+        <div className="font-change">
+        <FontSizeChanger 
+          targets={['.chat-message','.chat-choices','.chat-error-message']}
+          options ={{
+            stepSize: 2,
+            range: 4
+          }}
+          customButtons={{
+            up: <span style={{'fontSize': '15px', cursor: 'zoom-in'}}>A+</span>,
+            down: <span style={{'fontSize': '15px', cursor: 'zoom-out'}}>A-</span>,
+            style: {
+              backgroundColor: '#000080',
+              color: 'white',
+              WebkitBoxSizing: 'border-box',
+              WebkitBorderRadius: '5px',
+              width: '40px',
+              height: '30px',
+              paddingBottom: '40px',
+              
+            },
+            buttonsMargin: 20
+          }}
+          />
+        </div>
+          <SecNavbar />
           <ColorModeSwitcher />
         </Flex>
       </Flex>
@@ -196,7 +344,7 @@ const App: React.FC = () => {
         justifyContent="center"
       >
         {/* Chat Body */}
-        <Box
+        <Box className="chat-body"
           bgImage={bgImg}
           p="0 1rem 2rem 1rem"
           transition="opacity 200ms"
@@ -209,7 +357,7 @@ const App: React.FC = () => {
           />
         </Box>
 
-        <TextBar onSend={sendMessage} />
+        <TextBar onSend={sendMessage} onSendLocation={sendLocation} />
       </Box>
     </Flex>
   );
