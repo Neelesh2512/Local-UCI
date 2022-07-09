@@ -86,7 +86,7 @@ const Home: NextPage = () => {
       </Head>
       <CookiesProvider>
         <Flex>
-        <Box flex="1" max-width="25%" position="relative">
+          <Box flex="1" max-width="25%" position="relative">
             <Flex width="25%" max-height="100vh" overflow-y="auto" position="fixed">
               {" "}
               {toggleSettings === 0 ? (
@@ -127,4 +127,3 @@ export default Home;
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-
