@@ -139,7 +139,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
       setState({
         ...state,
         messages: state.messages.concat({
-          username: "UCI",
+          username: currentUser.name,
           text: msg.content.title,
           image: msg.content.media_url,
           choices: msg.content.choices,
@@ -151,7 +151,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
       setState({
         ...state,
         messages: state.messages.concat({
-          username: "UCI",
+          username: currentUser.name,
           text: msg.content.title,
           audio: msg.content.media_url,
           choices: msg.content.choices,
@@ -162,7 +162,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
       setState({
         ...state,
         messages: state.messages.concat({
-          username: "UCI",
+          username: currentUser.name,
           text: msg.content.title,
           video: msg.content.media_url,
           choices: msg.content.choices,
@@ -173,7 +173,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
       setState({
         ...state,
         messages: state.messages.concat({
-          username: "UCI",
+          username: currentUser.name,
           text: msg.content.title,
           doc: msg.content.media_url,
           choices: msg.content.choices,
@@ -184,7 +184,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
       setState({
         ...state,
         messages: state.messages.concat({
-          username: "UCI",
+          username: currentUser.name,
           text: msg.content.title,
           choices: msg.content.choices,
         }),
@@ -345,7 +345,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
             up: <span style={{'fontSize': '15px', cursor: 'zoom-in'}}>A+</span>,
             down: <span style={{'fontSize': '15px', cursor: 'zoom-out'}}>A-</span>,
             style: {
-              backgroundColor: '#000080',
+              backgroundColor: '#000',
               color: 'white',
               WebkitBoxSizing: 'border-box',
               WebkitBorderRadius: '5px',

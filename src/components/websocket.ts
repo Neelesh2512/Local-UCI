@@ -7,7 +7,7 @@ import {io} from 'socket.io-client';
 
 // export const socket = io(`${process.env.NEXT_PUBLIC_TRANSPORT_SOCKET_URL}`,{query: {deviceID:`phone:${localStorage.getItem("phoneNumber")}`}});
 export const send = (msg: any, session: any, accessToken: any,toUser: {name: string, number: string | null},socket:any) => {
-
+  console.log(toUser.number);
   if (toUser.number === null || toUser.number === "null") {
     socket.emit("botRequest", {
       content: {
