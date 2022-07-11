@@ -73,7 +73,7 @@ return (
         <MenuButton className={styles.menuBox}
           as={IconButton}
           aria-label='Options'
-          icon={<HamburgerIcon />}
+          icon={<HamburgerIcon color="white" />}
           variant='outline'
           style={{width: "60px", height: "20px"}}
         />

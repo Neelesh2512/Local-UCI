@@ -24,6 +24,7 @@ import ColorModeSwitcher from "./ColorModeSwitcher";
 import { SessionState } from "http2";
 import SecNavbar from "./SecNavbar";
 import dynamic from 'next/dynamic';
+import { isNullOrUndefined } from "util";
 
 
 const FontSizeChanger = dynamic(
@@ -139,7 +140,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
       setState({
         ...state,
         messages: state.messages.concat({
-          username: "UCI",
+          username: currentUser.name,
           text: msg.content.title,
           image: msg.content.media_url,
           choices: msg.content.choices,
@@ -151,7 +152,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
       setState({
         ...state,
         messages: state.messages.concat({
-          username: "UCI",
+          username: currentUser.name,
           text: msg.content.title,
           audio: msg.content.media_url,
           choices: msg.content.choices,
@@ -162,7 +163,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
       setState({
         ...state,
         messages: state.messages.concat({
-          username: "UCI",
+          username: currentUser.name,
           text: msg.content.title,
           video: msg.content.media_url,
           choices: msg.content.choices,
@@ -173,7 +174,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
       setState({
         ...state,
         messages: state.messages.concat({
-          username: "UCI",
+          username: currentUser.name,
           text: msg.content.title,
           doc: msg.content.media_url,
           choices: msg.content.choices,
@@ -184,7 +185,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
       setState({
         ...state,
         messages: state.messages.concat({
-          username: "UCI",
+          username: currentUser.name,
           text: msg.content.title,
           choices: msg.content.choices,
         }),
@@ -203,7 +204,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
     if (!accessToken) {
       router.push("/login");
     } else {
-      send(text, state.session, accessToken, currentUser, socket);
+      send(text, state.session, accessToken, currentUser, socket,null);
       if(media){  
         if (media.mimeType.slice(0,5) === "image"){
           setState({
@@ -264,7 +265,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
   };
 
   const sendLocation = (location: any): void => {
-    send(location,state.session, accessToken, currentUser, socket);
+    send(location,state.session, accessToken, currentUser, socket,null);
     navigator.geolocation.getCurrentPosition((position: any) => {
       setState({
         ...state,
@@ -345,7 +346,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
             up: <span style={{'fontSize': '15px', cursor: 'zoom-in'}}>A+</span>,
             down: <span style={{'fontSize': '15px', cursor: 'zoom-out'}}>A-</span>,
             style: {
-              backgroundColor: '#000080',
+              backgroundColor: '#000',
               color: 'white',
               WebkitBoxSizing: 'border-box',
               WebkitBorderRadius: '5px',

@@ -78,7 +78,7 @@ const ChatSection: React.FC<chatSectionProps> = ({
         /> */}
         {allUsers.map((user) => {
           return (
-            <ChatItem active={user.active} image="" name={user.name} toChangeUser={changingUser} />
+            <ChatItem key={user.name} active={user.active} image="" name={user.name} toChangeUser={changingUser} />
           );
         })}
       </Box>
