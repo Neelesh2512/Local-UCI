@@ -203,7 +203,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
     if (!accessToken) {
       router.push("/login");
     } else {
-      send(text, state.session, accessToken, currentUser, socket);
+      send(text, state.session, accessToken, currentUser, socket,null);
       if(media){  
         if (media.mimeType.slice(0,5) === "image"){
           setState({
@@ -264,7 +264,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
   };
 
   const sendLocation = (location: any): void => {
-    send(location,state.session, accessToken, currentUser, socket);
+    send(location,state.session, accessToken, currentUser, socket,null);
     navigator.geolocation.getCurrentPosition((position: any) => {
       setState({
         ...state,
