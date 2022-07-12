@@ -336,7 +336,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
             return false;
           }}
         >
-          <FontSizeChanger 
+          {/* <FontSizeChanger 
           targets={['.chat-message','.chat-choices','.chat-error-message']}
           options ={{
             stepSize: 2,
@@ -357,7 +357,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
             },
             buttonsMargin: 20
           }}
-          />
+          /> */}
           <SecNavbar />
           <ColorModeSwitcher />
         </Flex>
