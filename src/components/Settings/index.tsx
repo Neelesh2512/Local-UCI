@@ -158,7 +158,7 @@ const Settings: React.FC<recentChatProps> = ({
       </Flex>
 
       {/* Profile Section */}
-      <Flex flex="1" flexWrap="wrap">
+      <Flex flex="1" flexWrap="wrap" >
         <Flex justifyContent="center" alignItems="center" flex="2" p="10px">
           <Box
             borderRadius="50%"
@@ -174,7 +174,7 @@ const Settings: React.FC<recentChatProps> = ({
       </Flex>
 
       {/* Settings */}
-      <Box flex="6" mt="1rem" pr="0.5rem">
+      <Box flex="6" mt="1rem" pr="0.5rem" >
         {/* <Setting icon={faClone} settingName="Wallpaper Theme"></Setting> */}
         <Setting
           icon={faUser}

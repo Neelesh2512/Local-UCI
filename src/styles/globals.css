@@ -48,6 +48,17 @@ a {
   color: inherit;
 }
 
+.chat-body-container {
+  background-color: #FFFFFF;
+}
+
+.chat-body{
+  background-color: #DDDDDD;
+  margin: 0 20px 0 20px;
+  /* box-shadow: inset 10px 10px 21px #bababa,
+            inset -10px -10px 21px #ffffff; */
+}
+
 .chat-message {
   z-index: 0;
   position: relative;
@@ -100,6 +111,8 @@ a {
   align-items: center;
   padding: 0.5rem;
 } */
+
+
 .chat-choices {
   font-size: 0.9rem;
   padding: 10px;
@@ -142,11 +155,11 @@ a {
   content: url("../assets/images/robot.png");
 }
 
-.chat-body-container::-webkit-scrollbar {
+/* .chat-body-container::-webkit-scrollbar {
   display: none;
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
+} */
 
 
 .chat__footer {
@@ -242,3 +255,4 @@ a {
   align-items: center;
   background: linear-gradient(45deg, #122564, transparent);
 }
+

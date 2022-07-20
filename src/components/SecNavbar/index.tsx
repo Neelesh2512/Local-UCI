@@ -7,6 +7,7 @@ import {
   IconButton,
   Flex,
   Box,
+  Switch,
 } from "@chakra-ui/react";
 
 import styles from "/src/components/SecNavbar/index.module.css";
@@ -34,40 +35,42 @@ const SecNavbar = () => {
     }
   },[]); 
 
-  useEffect(() => {
-    if (theme === "green") {
-      wallpaper1();
-    } else if (theme === "red") {
-      wallpaper2();
-    }
-  },[theme]);
 
-  const wallpaper1 = () => {
-    var wallpaper = document.getElementsByClassName("chat-body") as HTMLCollectionOf<HTMLElement>;
-    wallpaper[0].style.backgroundImage = "url("+wallpaper_1+")";
-    setTheme("green");
-    localStorage.setItem("theme", "green");
-  }
+
+  // useEffect(() => {
+  //   if (theme === "green") {
+  //     wallpaper1();
+  //   } else if (theme === "red") {
+  //     wallpaper2();
+  //   }
+  // },[theme]);
+
+  // const wallpaper1 = () => {
+  //   var wallpaper = document.getElementsByClassName("chat-body") as HTMLCollectionOf<HTMLElement>;
+  //   wallpaper[0].style.backgroundImage = "url("+wallpaper_1+")";
+  //   setTheme("green");
+  //   localStorage.setItem("theme", "green");
+  // }
   
-  const wallpaper2 = () => {
-    var wallpaper = document.getElementsByClassName("chat-body") as HTMLCollectionOf<HTMLElement>;
-    wallpaper[0].style.backgroundImage = "url("+wallpaper_2+")";
-    setTheme("red");
-    localStorage.setItem("theme", "red");
-  }
+  // const wallpaper2 = () => {
+  //   var wallpaper = document.getElementsByClassName("chat-body") as HTMLCollectionOf<HTMLElement>;
+  //   wallpaper[0].style.backgroundImage = "url("+wallpaper_2+")";
+  //   setTheme("red");
+  //   localStorage.setItem("theme", "red");
+  // }
   
-  const original = () => {
-    var wallpaper = document.getElementsByClassName("chat-body") as HTMLCollectionOf<HTMLElement>;
-    wallpaper[0].style.backgroundImage = "none";
-    wallpaper[0].style.backgroundColor = "white";
-    setTheme("white");
-    localStorage.setItem("theme","white");
-  }
+  // const original = () => {
+  //   var wallpaper = document.getElementsByClassName("chat-body") as HTMLCollectionOf<HTMLElement>;
+  //   wallpaper[0].style.backgroundImage = "none";
+  //   wallpaper[0].style.backgroundColor = "white";
+  //   setTheme("white");
+  //   localStorage.setItem("theme","white");
+  // }
   
 const router = useRouter();
 return (
 
-  <Flex p="2" borderBottom="1px">
+  <Flex p="2" >
     <Box>
     <Menu>
         <MenuButton className={styles.menuBox}
@@ -78,17 +81,13 @@ return (
           style={{width: "60px", height: "20px"}}
         />
         <MenuList className={styles.navbar}>
-          <Link href="/">
+          {/* <Link href="/">
           <MenuItem className={styles.item} >
             Home
           </MenuItem>
-          </Link>
-          {/* <Link href="/profilepage">
-          <MenuItem className={styles.item} >
-            Profile Page
-          </MenuItem>
           </Link> */}
-          <Submenu wall1={wallpaper1} wall2={wallpaper2} orig={original} />
+          {/* <Submenu wall1={wallpaper1} wall2={wallpaper2} orig={original} /> */}
+          <Submenu />
         </MenuList>
     </Menu>
     </Box>

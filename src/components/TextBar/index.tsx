@@ -46,8 +46,9 @@ const TextBar: React.FC<textBarProps> = (props) => {
 
 
   // Toggle Settings
-  const bg = useColorModeValue("#06d755", "#202C33");
+  const bg = useColorModeValue("#1D90F5", "#202C33");
   // const childrenIcon = useColorModeValue("#202C33","#AEBAC1")
+  const bgColor = useColorModeValue("#FFFFFF", "#323644");
   const textColor = useColorModeValue("#000", "#fff");
   const faIcon = useColorModeValue("#202C33", "#fff");
   // ---------------
@@ -107,7 +108,7 @@ const TextBar: React.FC<textBarProps> = (props) => {
   return (
     <>
       <ToastContainer />
-      <Box className="chat__footer" width="75%">
+      <Box className="chat__footer" width="75%" backgroundColor={bgColor}>
         <form>
           <InputGroup
             position="relative"
@@ -126,9 +127,10 @@ const TextBar: React.FC<textBarProps> = (props) => {
               _placeholder={{ color: "black" }}
               ref={input}
               onKeyDown={sendMessageIfEnter}
-              size="sm"
+              size="lg"
               borderRadius="20px"
               // width="calc('100% - 200px')"
+              backgroundColor="white"
             />
             <InputRightElement
               mr="2rem"
@@ -139,9 +141,10 @@ const TextBar: React.FC<textBarProps> = (props) => {
                         { position: "relative", 
                           overflow: "hidden", 
                           marginRight: '7px', 
-                          paddingTop: '5px'
+                          paddingTop: '5px',
+                          margin: "19px 5px 0 0"
                         }}>
-                          <FontAwesomeIcon color="#202C33" icon={faPaperclip} />
+                          <FontAwesomeIcon color="#202C33"  icon={faPaperclip} />
                           <input type="file" name="file" 
                           style={
                             {position: "absolute", 
@@ -178,7 +181,7 @@ const TextBar: React.FC<textBarProps> = (props) => {
                   }}/>
                     <FontAwesomeIcon color="#202C33" icon={faPaperclip} />
                   </Button> */}
-                  <Button size="xs" style={{marginTop: "5px"}} onClick={sendLocation}>
+                  <Button size="md" style={{margin: "15px 5px 0 0"}} onClick={sendLocation}>
                     <FontAwesomeIcon color="#202C33" icon={faLocationDot} />
                   </Button>
                 </Stack>
@@ -186,7 +189,7 @@ const TextBar: React.FC<textBarProps> = (props) => {
             />
           </InputGroup>
           <Button
-            bgColor={bg}
+            bgColor="#1D90F5"
             color={faIcon}
             w="46px"
             h="46px"

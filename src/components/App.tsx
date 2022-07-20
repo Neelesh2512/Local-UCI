@@ -55,12 +55,13 @@ const App: React.FC<appProps> = ({ currentUser }) => {
   const [profileOpen, setProfileOpen] = useState(false);
 
   // Chakra Theme Toggle Information
-  const bgImg = useColorModeValue(
-    "url('/light_back_2.jpg')",
-    "url('/dark_back.png')"
-  );
-  const bg = useColorModeValue("#06d755", "#202C33");
-  const textColor = useColorModeValue("#202C33", "#fff");
+  // const bgImg = useColorModeValue(
+  //   "url('/light_back_2.jpg')",
+  //   "url('/dark_back.png')"
+  // );
+  const bg = useColorModeValue("#FFFFFF", "#323644");
+  const textColor = useColorModeValue("#000000", "#FFFFFF");
+  const boxColor = useColorModeValue("#DDDDDD", "#242631");
   // ----------------------
 
   const initialState: {
@@ -310,7 +311,6 @@ const App: React.FC<appProps> = ({ currentUser }) => {
     >
       {/* Heading */}
       <Flex
-        backgroundImage={"url('/sidebar.png')"}
         backgroundRepeat="no-repeat"
         backgroundSize="cover"
         backgroundBlendMode="multiply"
@@ -323,8 +323,8 @@ const App: React.FC<appProps> = ({ currentUser }) => {
         flexWrap="wrap"
         zIndex="1"
       >
-        <Box p="1rem" color={textColor}>
-          <h1>{currentUser.name}</h1>
+        <Box p="1rem" textColor={textColor}>
+          <h1 style={{fontSize: "1.5rem"}}>{currentUser.name}</h1>
         </Box>
         <Spacer />
         <Flex
@@ -358,20 +358,20 @@ const App: React.FC<appProps> = ({ currentUser }) => {
             buttonsMargin: 20
           }}
           /> */}
-          <SecNavbar />
           <ColorModeSwitcher />
         </Flex>
       </Flex>
 
       {/* Chat Body Container */}
       <Box
-      bgImage={bgImg}
+      // bgImage={bgImg}
         backgroundPosition="cover"
         flex="10"
         z-index="2"
-        
+        className="chat-body-container"
         display="flex"
         justifyContent="center"
+        backgroundColor={bg}
       >
         {/* Chat Body */}
         <Box
@@ -382,6 +382,7 @@ const App: React.FC<appProps> = ({ currentUser }) => {
           paddingBottom="3rem"
           overflow="scroll"
           className="chat-body"
+          backgroundColor={boxColor}
         >
           <MessageWindow
             messages={state.messages}

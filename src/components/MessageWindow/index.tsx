@@ -51,7 +51,7 @@ const Message: React.FC<messageProps> = ({
   doc: any;
 }) => {
   // Theme toggle Settings
-  const box_color = useColorModeValue("#06d755", "#202C33");
+  const box_color = useColorModeValue("#FFFFFF", "#424656");
   const text_color = useColorModeValue("#000", "#fff");
   // ------------
   return (
@@ -62,7 +62,7 @@ const Message: React.FC<messageProps> = ({
           <Box
             borderColor="white"
             color={text_color}
-            bgColor={box_color}
+            bgColor="#1D90F5"
             className="chat-message chat-reciever"
           >
             <Box className={styles.message_username}>
@@ -117,7 +117,9 @@ const Message: React.FC<messageProps> = ({
         <>
           <div>
             <Box
-              bgColor={box_color}
+              bgColor={text === "Invalid Input!!! Please try again."
+              ? "#FF5C5C"
+              : box_color}
               color={text_color}
               borderColor="white"
               className={
@@ -182,6 +184,7 @@ const Message: React.FC<messageProps> = ({
                 {choices.map((choice: any) => (
                   <Button
                     borderColor="white"
+                    backgroundColor={box_color}
                     className="chat-choices"
                     key={choice.key}
                     onClick={() => data(choice)}

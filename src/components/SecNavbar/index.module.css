@@ -1,5 +1,4 @@
 .navbar{
-    background-color: brown;
     border: 0px;
     height: 20px;
     width: 100px;
@@ -18,6 +17,8 @@
 .item{
     padding: 5px;
     border: 0px;
+    background-color: #ffffff;
+    width: 100%;
     /* background-color: #000; */
 }
 
@@ -40,4 +41,20 @@
 .subitem{
     padding: 0px;
     border: 0px;
+}
+
+.bgcolor{
+    background-color: #122564;
+    color: aliceblue;
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.bgcolor:hover{
+    background-color:aliceblue;
+    color:#122564;
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 10px;
 }

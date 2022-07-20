@@ -1,11 +1,17 @@
 import React from "react";
-import { Flex, Box, Text, useColorModeValue, Button } from "@chakra-ui/react";
+import { Flex, Box, Text, useColorModeValue, Button, Menu,
+  MenuButton,
+  MenuList,
+  MenuItem, } from "@chakra-ui/react";
 import styles from "./ChatSection.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisVertical, faUser } from "@fortawesome/free-solid-svg-icons";
 import ChatItem from "./ChatItem";
-
-
+import SecNavbar from "../SecNavbar";
+import Submenu from "../SecNavbar/Submenu";
+import { HamburgerIcon } from "@chakra-ui/icons";
+import Setting from "../Settings/Setting";
+import Settings from "../Settings";
 interface chatSectionProps {
   toShowSettings: (event: React.MouseEvent) => void;
   toChangeCurrentUser: (name: string) => void;
@@ -17,7 +23,8 @@ const ChatSection: React.FC<chatSectionProps> = ({
   toChangeCurrentUser,
   allUsers,
 }) => {
-  const bg = useColorModeValue("#06d755", "#202C33");
+
+  const bg = useColorModeValue("#DDDDDD", "#272A37");
 
   const changingUser = (name: string) => {
     toChangeCurrentUser(name);
@@ -26,23 +33,25 @@ const ChatSection: React.FC<chatSectionProps> = ({
     <Box className={styles.main__container}>
       {/* Settings Heading */}
       <Box
+        className={styles.header}
         flex="1"
         bgColor={bg}
-        mb="1rem"
+        mb="0rem"
         width="100%"
         display="flex"
         justifyContent="space-between"
       >
-        <Flex justifyContent="center" alignItems="center" flex="1">
+        <Flex   justifyContent="center" alignItems="center" flex="1">
           <Box
             borderRadius="50%"
-            bgImage="url('/killua.jpg')"
             height="60px"
-            width="60px"
+            width="200px"
             bgPosition="center"
             bgRepeat="no-repeat"
             bgSize="cover"
-          />
+            fontSize={"35px"}
+            marginLeft="1rem"
+          >Chats</Box>
         </Flex>
 
         <Box
@@ -53,14 +62,21 @@ const ChatSection: React.FC<chatSectionProps> = ({
           alignItems="center"
           pr="1rem"
         >
-          <Button onClick={toShowSettings}>
-            <FontAwesomeIcon icon={faEllipsisVertical} />
-          </Button>
+          <Menu closeOnSelect={false}>
+            <MenuButton>
+              <FontAwesomeIcon icon={faEllipsisVertical} />
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={toShowSettings}>Settings</MenuItem>
+              <div> <Submenu /> </div>
+            </MenuList>
+
+          </Menu>
         </Box>
       </Box>
 
       {/* Profile Section */}
-      <Box flex="8">
+      <Box flex="8" backgroundColor={bg}>
         {/* <ChatItem
           image="/neelesh.png"
           name="Neelesh"
