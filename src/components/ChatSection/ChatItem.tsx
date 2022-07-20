@@ -1,40 +1,81 @@
 import React from "react";
+import { useState } from "react";
+import Profile from "../Profile";
 import { Flex, Box, Text, useColorModeValue } from "@chakra-ui/react";
-
+import styles from "./ChatItem.module.css";
 
 interface chatItemProps {
-    image: string,
-    name: string
+  image: string;
+  name: string;
+  toChangeUser: (name: string) => void;
+  active: boolean
 }
 
-const ChatItem: React.FC<chatItemProps> = ({image, name}) => {
-  const borderColor = useColorModeValue("#000", "#fff");
+const ChatItem: React.FC<chatItemProps> = ({ image, name, toChangeUser,active }) => {
+  const [showProfile, setShowProfile] = useState(false);
+  // Theme toggle Settings
+  const box_color = useColorModeValue("#FFFFFF", "#464a56");
+  const text_color = useColorModeValue("#000", "#fff");
+  //const borderColor = useColorModeValue("#1D90F5", "#fff");
+  // ------------
+  const closingProfile = () => {
+    setShowProfile(false);
+  };
 
   return (
-    <Flex cursor="pointer" height="max-content" m="0.5rem">
-      <Flex fontSize="35px" flex="1" alignItems="center" justifyContent="end">
-        <Box
-          borderRadius="50%"
-          bgImage={image}
-          height="80px"
-          width="80px"
-          bgPosition="center"
-          bgRepeat="no-repeat"
-          bgSize="cover"
-        />
-      </Flex>
-      <Flex
-        ml="0.5rem"
-        pl="0.5rem"
-        flex="4"
-        fontWeight="extrabold"
-        alignItems="center"
-        borderTop={`0.5px solid ${borderColor}`}
-        borderBottom={`0.5px solid ${borderColor}`}
+    <>
+      <Flex 
+      className={active?styles.active:styles.chatItem} 
+      cursor="pointer" 
+      height="max-content" 
+      m="0.5rem" 
+      backgroundColor={active?"#1D90F5":box_color}
       >
-        <Text fontSize="md">{name}</Text>
+        <Flex
+          fontSize="35px"
+          flex="1"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Box
+            className={styles.chatCircle}
+            cursor="pointer"
+            onClick={() => {
+              setShowProfile(true);
+            }}
+            borderRadius="50%"
+            bgImage={image}
+            height="60px"
+            width="60px"
+            bgPosition="center"
+            bgRepeat="no-repeat"
+            bgSize="cover"
+
+          />
+        </Flex>
+        <Flex
+          onClick={() => {toChangeUser(name)}}
+          className={active?styles.active:styles.chat__text} 
+          ml="0.5rem"
+          pl="0.5rem"
+          flex="4"
+          alignItems="center"
+          backgroundColor={active?"#1D90F5":box_color}
+          color={text_color}
+          fontWeight="extrabold"
+          fontSize={active?"30px":"20px"}
+        >
+          <p>{name}</p>
+        </Flex>
       </Flex>
-    </Flex>
+      <Profile
+        show={showProfile}
+        name={name}
+        userImg={image}
+        removeProfile={closingProfile}
+      />
+    </>
   );
 };
+
 export default ChatItem;

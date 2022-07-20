@@ -1,0 +1,18 @@
+  .active {
+      background-color: rgb(32, 179, 57);
+      color: black;
+      padding: 20px;
+      border-radius: 15px;
+      width: 95%;
+  }
+  
+  .chatItem{
+    background-color: rgb(253, 253, 253);
+    padding: 20px;
+    border-radius: 15px;
+    width: 95%;
+  }
+
+  .chatCircle{
+    background-color: blue;
+  }
