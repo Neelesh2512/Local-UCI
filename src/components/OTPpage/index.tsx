@@ -34,7 +34,7 @@ const OTPpage: React.FC = () => {
     const inputOTP: string = input1 + input2 + input3 + input4;
     if (inputOTP.length === 4) {
       fetch(
-        `${process.env.NEXT_PUBLIC_OTP_BASE_URL}/uci/loginOrRegister?phone=${router.query.state}&otp=${inputOTP}`,
+        `${process.env.NEXT_PUBLIC_OTP_BASE_URL}uci/loginOrRegister?phone=${router.query.state}&otp=${inputOTP}`,
         {
           method: "get",
         }
@@ -121,7 +121,8 @@ const OTPpage: React.FC = () => {
           flexDirection="column"
           alignContent="center"
           justifyContent="center"
-          color="black"
+          color="#000"
+          px="1rem"
         >
           <div className={styles.otpVerify}>OTP Verification</div>
 
@@ -134,40 +135,40 @@ const OTPpage: React.FC = () => {
           <HStack style={{ marginTop: "34px", justifyContent: "center" }}>
             <PinInput otp placeholder="">
               <PinInputField
-                boxShadow="0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-              0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
-              0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-              0 100px 80px rgba(0, 0, 0, 0.12);"
                 className={styles.pinInputField}
                 value={input1}
                 onChange={handleOTP1}
+                boxShadow="0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+      0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+      0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+      0 100px 80px rgba(0, 0, 0, 0.12);"
               />
               <PinInputField
-                boxShadow="0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-              0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
-              0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-              0 100px 80px rgba(0, 0, 0, 0.12);"
                 className={styles.pinInputField}
                 value={input2}
                 onChange={handleOTP2}
+                boxShadow="0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+      0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+      0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+      0 100px 80px rgba(0, 0, 0, 0.12);"
               />
               <PinInputField
-                boxShadow="0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-              0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
-              0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-              0 100px 80px rgba(0, 0, 0, 0.12);"
                 className={styles.pinInputField}
                 value={input3}
                 onChange={handleOTP3}
+                boxShadow="0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+      0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+      0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+      0 100px 80px rgba(0, 0, 0, 0.12);"
               />
               <PinInputField
-                boxShadow="0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-              0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
-              0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-              0 100px 80px rgba(0, 0, 0, 0.12);"
                 className={styles.pinInputField}
                 value={input4}
                 onChange={handleOTP4}
+                boxShadow="0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+      0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+      0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+      0 100px 80px rgba(0, 0, 0, 0.12);"
               />
             </PinInput>
           </HStack>

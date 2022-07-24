@@ -8,29 +8,22 @@ interface chatItemProps {
   image: string;
   name: string;
   toChangeUser: (name: string) => void;
-  active: boolean
+  toRemoveUser: (name: string) => void;
+  active: boolean;
 }
 
-const ChatItem: React.FC<chatItemProps> = ({ image, name, toChangeUser,active }) => {
+const ChatItem: React.FC<chatItemProps> = ({ image, name, toChangeUser,toRemoveUser,active }) => {
   const [showProfile, setShowProfile] = useState(false);
-  // Theme toggle Settings
-  const box_color = useColorModeValue("#FFFFFF", "#464a56");
-  const text_color = useColorModeValue("#000", "#fff");
-  //const borderColor = useColorModeValue("#1D90F5", "#fff");
-  // ------------
+
+  const bg = useColorModeValue("rgba(84,167,191,0.25)","rgba(56, 37, 37, 0.25)");
+
   const closingProfile = () => {
     setShowProfile(false);
   };
 
   return (
     <>
-      <Flex 
-      className={active?styles.active:styles.chatItem} 
-      cursor="pointer" 
-      height="max-content" 
-      m="0.5rem" 
-      backgroundColor={active?"#1D90F5":box_color}
-      >
+      <Flex bgColor={bg} className={`${styles.chatContainer} ${active?styles.active:styles.chat__text}`}  cursor="pointer" height="max-content" m="0.5rem">
         <Flex
           fontSize="35px"
           flex="1"
@@ -38,7 +31,6 @@ const ChatItem: React.FC<chatItemProps> = ({ image, name, toChangeUser,active })
           justifyContent="center"
         >
           <Box
-            className={styles.chatCircle}
             cursor="pointer"
             onClick={() => {
               setShowProfile(true);
@@ -50,20 +42,17 @@ const ChatItem: React.FC<chatItemProps> = ({ image, name, toChangeUser,active })
             bgPosition="center"
             bgRepeat="no-repeat"
             bgSize="cover"
-
           />
         </Flex>
         <Flex
-          onClick={() => {toChangeUser(name)}}
-          className={active?styles.active:styles.chat__text} 
+          onClick={() => {
+            toChangeUser(name);
+          }}
+          
           ml="0.5rem"
-          pl="0.5rem"
+          // pl="0.25rem"
           flex="4"
           alignItems="center"
-          backgroundColor={active?"#1D90F5":box_color}
-          color={text_color}
-          fontWeight="extrabold"
-          fontSize={active?"30px":"20px"}
         >
           <p>{name}</p>
         </Flex>
@@ -73,6 +62,7 @@ const ChatItem: React.FC<chatItemProps> = ({ image, name, toChangeUser,active })
         name={name}
         userImg={image}
         removeProfile={closingProfile}
+        toRemoveUser={toRemoveUser}
       />
     </>
   );

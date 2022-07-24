@@ -1,0 +1,64 @@
+.container {
+  width: 80vw;
+  position: fixed;
+  bottom: 5vh;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.input_box {
+  background-color: #424656;
+  border-radius: 15px;
+  height: 6vh;
+  width: 55vw;
+  padding: 1rem;
+  border: 4px solid #2387E1;
+  margin: 0 0.5rem;
+}
+
+.sendMessage_form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.submit_button {
+  width: 10vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 4px 6px 4px 0px rgba(0, 0, 0, 0.25);
+  background-color: #1d90f5;
+}
+
+.add_button {
+  width: 10vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 4px 6px 4px 0px rgba(0, 0, 0, 0.25);
+  border: 1px solid #525769;
+  background-color: #424656;
+}
+
+
+/* Theme Toggle Classes */
+
+.lightInput {
+  background-color: #fff;
+  
+}
+
+.darkInput {
+  background-color: #424656;
+}
+
+.lightAttach {
+  background-color: #fff;
+}
+
+.darkAttach {
+  background-color: #424656;
+}

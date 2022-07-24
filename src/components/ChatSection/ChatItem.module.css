@@ -1,18 +1,39 @@
-  .active {
-      background-color: rgb(32, 179, 57);
-      color: black;
-      padding: 20px;
-      border-radius: 15px;
-      width: 95%;
-  }
-  
-  .chatItem{
-    background-color: rgb(253, 253, 253);
-    padding: 20px;
-    border-radius: 15px;
-    width: 95%;
-  }
+.chat__text:hover {
+  animation-name: hover_button;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+}
 
-  .chatCircle{
-    background-color: blue;
+@keyframes hover_button {
+  from {
+    background-color: transparent;
+    opacity: 100;
   }
+  to {
+    opacity: 50%;
+  }
+}
+
+.chatContainer {
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 0.75rem;
+}
+
+.active {
+  animation-name: clicked_button;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes clicked_button {
+  from {
+    padding: 0.75rem 0.75rem;
+  }
+  to {
+    padding: 0.5rem 0.75rem;
+  }
+}

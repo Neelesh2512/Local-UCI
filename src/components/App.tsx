@@ -13,56 +13,63 @@ import {
   Flex,
   Text,
   Spacer,
+  Image,
   interactivity,
 } from "@chakra-ui/react";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { startWebsocketConnection } from "./websocket";
 import Notification from "./Notifications";
 import { useCookies, withCookies } from "react-cookie";
 import { useRouter } from "next/router";
 import ColorModeSwitcher from "./ColorModeSwitcher";
 import { SessionState } from "http2";
-import SecNavbar from "./SecNavbar";
-import dynamic from 'next/dynamic';
-import { isNullOrUndefined } from "util";
+import { useCol } from "react-bootstrap/esm/Col";
+import PhoneView from "./PhoneView/index";
+import WebView from "./WebView";
+import RecentChats from "./PhoneView/RecentChats";
 
 
-const FontSizeChanger = dynamic(
-  () => {
-    return import("react-font-size-changer");
-  },
-  { ssr: false }
-);
-// import darkImage from "../../public/dark_back.png";
-// import lightImage from "../../public/dark_back.jpg";
 
 interface appProps {
   currentUser: { name: string; number: string | null };
+  allUsers: { name: string; number: string | null; active: boolean }[];
+  userName: string;
+  toChangeCurrentUser:  (name: string, number: string | null) => void;
+  toAddUser: (newName: string, newNumber: string) => void;
+  toRemoveUser: (name: string, number: string | null) => void;
 }
 
-const App: React.FC<appProps> = ({ currentUser }) => {
+type recievedMessage = botMessage | humanMessage;
+
+type botMessage = {
+  content: {
+    caption: any;
+    choices: { key: string; text: string; backmenu: boolean }[];
+    media_url: any;
+    title: string;
+  };
+  from: string;
+};
+
+type humanMessage = {
+  content: {
+    title: string;
+    from: string;
+    choices: null;
+  };
+  from: string;
+};
+
+const App: React.FC<appProps> = ({ toRemoveUser, currentUser, allUsers, userName, toChangeCurrentUser,toAddUser }) => {
   // Router for Navigation
   const router = useRouter();
 
   // For Authentication
   const [accessToken, setAccessToken] = useState("");
-  const [isVerified, setIsVerified] = useState(false);
   const [cookies, setCookies] = useCookies();
-  const [socket, setSocket] = useState<any>(null);
+  const [socket, setSocket] = useState<Socket>();
+  const [profileName, setProfileName] = useState(userName);
 
-  const [profileName, setProfileName] = useState("");
-  // For showing the Profile
-  const [profileOpen, setProfileOpen] = useState(false);
-
-  // Chakra Theme Toggle Information
-  // const bgImg = useColorModeValue(
-  //   "url('/light_back_2.jpg')",
-  //   "url('/dark_back.png')"
-  // );
-  const bg = useColorModeValue("#FFFFFF", "#323644");
-  const textColor = useColorModeValue("#000000", "#FFFFFF");
-  const boxColor = useColorModeValue("#DDDDDD", "#242631");
-  // ----------------------
 
   const initialState: {
     messages: any[];
@@ -74,7 +81,11 @@ const App: React.FC<appProps> = ({ currentUser }) => {
     session: {},
   };
 
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState<{
+    messages: any[];
+    username: string;
+    session: any;
+  }>(initialState);
 
   const scrollToBottom: () => void = () => {
     window.scrollTo(0, document.body.scrollHeight);
@@ -109,11 +120,10 @@ const App: React.FC<appProps> = ({ currentUser }) => {
         query: { deviceId: `phone:${localStorage.getItem("phoneNumber")}` },
       })
     );
-    setProfileName(localStorage.getItem("profileName") || "");
   }, []);
 
   useEffect(() => {
-    if (socket !== null) {
+    if (socket !== undefined) {
       startWebsocketConnection(socket);
     }
   }, [socket]);
@@ -129,60 +139,25 @@ const App: React.FC<appProps> = ({ currentUser }) => {
   }, [state]);
 
   const onSessionCreated = (session: { session: any }): void => {
-    // console.log({ session });
     setState({
       ...state,
       session: session,
     });
   };
 
-  const onMessageReceived = (msg: any): void => {
-    if (msg.content.msg_type === "IMAGE"){
+  const onMessageReceived = (msg: recievedMessage): void => {
+    console.log("The message is");
+    console.log(msg);
+    if (msg.from.split(":")[1] === currentUser.number) {
       setState({
         ...state,
         messages: state.messages.concat({
           username: currentUser.name,
           text: msg.content.title,
-          image: msg.content.media_url,
-          choices: msg.content.choices,
-          caption: msg.content.caption,
-        }),
-      });
-    }
-    else if (msg.content.msg_type === "AUDIO"){
-      setState({
-        ...state,
-        messages: state.messages.concat({
-          username: currentUser.name,
-          text: msg.content.title,
-          audio: msg.content.media_url,
           choices: msg.content.choices,
         }),
       });
-    }
-    else if (msg.content.msg_type === "VIDEO"){
-      setState({
-        ...state,
-        messages: state.messages.concat({
-          username: currentUser.name,
-          text: msg.content.title,
-          video: msg.content.media_url,
-          choices: msg.content.choices,
-        }),
-      });
-    }
-    else if (msg.content.msg_type === "DOCUMENT"){
-      setState({
-        ...state,
-        messages: state.messages.concat({
-          username: currentUser.name,
-          text: msg.content.title,
-          doc: msg.content.media_url,
-          choices: msg.content.choices,
-        }),
-      });
-    }
-    else{
+    } else if (currentUser.number === null) {
       setState({
         ...state,
         messages: state.messages.concat({
@@ -201,200 +176,111 @@ const App: React.FC<appProps> = ({ currentUser }) => {
     });
   };
 
-  const sendMessage = (text: string, media: any): void => {
+  const sendMessage = (text: string): void => {
     if (!accessToken) {
       router.push("/login");
     } else {
-      send(text, state.session, accessToken, currentUser, socket,null);
-      if(media){  
-        if (media.mimeType.slice(0,5) === "image"){
-          setState({
-            ...state,
-            messages: state.messages.concat({
-              username: state.username,
-              image: media.url
-            }),
-          });
-        }
-        else if (media.mimeType.slice(0,5) === "audio"){
-          setState({
-            ...state,
-            messages: state.messages.concat({
-              username: state.username,
-              audio: media.url
-            }),
-          });
-        }
-        else if (media.mimeType.slice(0,5) === "video"){
-          setState({
-            ...state,
-            messages: state.messages.concat({
-              username: state.username,
-              video: media.url,
-            }),
-          });
-        }
-        else if (media.mimeType.slice(0,11) === "application"){
-          setState({
-            ...state,
-            messages: state.messages.concat({
-              username: state.username,
-              doc: media.url,
-            }),
-          });
-        }else{
-          setState({
-            ...state,
-            messages: state.messages.concat({
-              username: state.username,
-              text: text,
-              doc: media.url
-            }),
-          });
-        }
-      }
-      else{
-        setState({
-          ...state,
-          messages: state.messages.concat({
-            username: state.username,
-            text: text,
-          }),
-        });
-      }
-    }
-  };
-
-  const sendLocation = (location: any): void => {
-    send(location,state.session, accessToken, currentUser, socket,null);
-    navigator.geolocation.getCurrentPosition((position: any) => {
+      send(text, state.session, accessToken, currentUser, socket);
       setState({
         ...state,
         messages: state.messages.concat({
           username: state.username,
-          location: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          }
+          text: text,
         }),
       });
-    })
-   
-}
+    }
+  };
 
   if (state.username === null) {
     console.log("Please set a username first");
     return (
       <div className="container">
         <div className="container-title">Enter username</div>
-        <TextBar onSend={setUserName} onSendLocation={sendLocation} />
+        <TextBar onSend={setUserName} />
       </div>
     );
   }
 
-  
-
-  const selected = (option: any): void => {
+  const selected = (option: {
+    key: string;
+    text: string;
+    backmenu: boolean;
+  }): void => {
     const toSend = option.key + " " + option.text;
-    sendMessage(toSend, null);
+    sendMessage(toSend);
   };
-
-  const showProfile: () => void = (): void => {
-    setProfileOpen(true);
-  };
-
-  return (
-    <Flex
-      flex="3"
-      flexDirection="column"
-      // position="absolute"
-    >
-      {/* Heading */}
-      <Flex
-        backgroundRepeat="no-repeat"
-        backgroundSize="cover"
-        backgroundBlendMode="multiply"
-        bgColor={bg}
-        flex="1"
-        justifyContent="space-between"
-        alignItems="center"
-        position="fixed"
-        width="75%"
-        flexWrap="wrap"
-        zIndex="1"
-      >
-        <Box p="1rem" textColor={textColor}>
-          <h1 style={{fontSize: "1.5rem"}}>{currentUser.name}</h1>
-        </Box>
-        <Spacer />
-        <Flex
-          p="1rem"
-          justifyContent="center"
-          alignItems="center"
-          onClick={(event) => {
-            if (event.stopPropagation) event.stopPropagation();
-            return false;
-          }}
-        >
-          {/* <FontSizeChanger 
-          targets={['.chat-message','.chat-choices','.chat-error-message']}
-          options ={{
-            stepSize: 2,
-            range: 4
-          }}
-          customButtons={{
-            up: <span style={{'fontSize': '15px', cursor: 'zoom-in'}}>A+</span>,
-            down: <span style={{'fontSize': '15px', cursor: 'zoom-out'}}>A-</span>,
-            style: {
-              backgroundColor: '#000',
-              color: 'white',
-              WebkitBoxSizing: 'border-box',
-              WebkitBorderRadius: '5px',
-              width: '40px',
-              height: '30px',
-              paddingBottom: '40px',
-              
-            },
-            buttonsMargin: 20
-          }}
-          /> */}
-          <ColorModeSwitcher />
-        </Flex>
-      </Flex>
-
-      {/* Chat Body Container */}
-      <Box
-      // bgImage={bgImg}
-        backgroundPosition="cover"
-        flex="10"
-        z-index="2"
-        className="chat-body-container"
-        display="flex"
-        justifyContent="center"
-        backgroundColor={bg}
-      >
-        {/* Chat Body */}
-        <Box
-          p="0 1rem 2rem 1rem"
-          transition="opacity 200ms"
-          width="100%"
-          height="95vh"
-          paddingBottom="3rem"
-          overflow="scroll"
-          className="chat-body"
-          backgroundColor={boxColor}
-        >
-          <MessageWindow
-            messages={state.messages}
-            username={state.username}
-            selected={selected}
-          />
-        </Box>
-
-        <TextBar onSend={sendMessage} onSendLocation={sendLocation} />
-      </Box>
-    </Flex>
-  );
+  const sizeVar = useWindowSize();
+  if (sizeVar.width < 768) {
+    return (
+      <PhoneView
+        messages={state.messages}
+        username={state.username}
+        selected={selected}
+        sendMessageFunc={sendMessage}
+        allUsers={allUsers}
+        toChangeCurrentUser={toChangeCurrentUser}
+        currentUser={currentUser}
+        addingNewUser={toAddUser}
+        toRemoveUser={toRemoveUser}
+      />
+    );
+  } else {
+    return (
+      <WebView
+        messages={state.messages}
+        username={state.username}
+        selected={selected}
+        sendMessageFunc={sendMessage}
+        allUsers={allUsers}
+        toChangeCurrentUser={toChangeCurrentUser}
+        currentUser={currentUser}
+        addingNewUser={toAddUser}
+        toRemoveUser={toRemoveUser}
+      />
+    );
+  }
 };
 
 export default App;
+
+function useWindowSize() {
+  // Initialize state with undefined width/height so server and client renders match
+  // Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0,
+  });
+
+  useEffect(() => {
+    // only execute all the code below in client side
+    if (typeof window !== "undefined") {
+      // Handler to call on window resize
+
+      // Set window width/height to state
+
+      // Add event listener
+      window.addEventListener("resize", () => {
+        setWindowSize({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        });
+      });
+
+      // Call handler right away so state gets updated with initial window size
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+
+      // Remove event listener on cleanup
+      return () =>
+        window.removeEventListener("resize", () => {
+          setWindowSize({
+            width: window.innerWidth,
+            height: window.innerHeight,
+          });
+        });
+    }
+  }, []); // Empty array ensures that effect is only run on mount
+  return windowSize;
+}

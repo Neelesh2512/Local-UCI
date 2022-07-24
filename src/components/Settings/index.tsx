@@ -21,7 +21,7 @@ interface recentChatProps {
   toChangePhoneNumber: (newPhoneNumber: string) => void;
   toChangeUserBio: (newBio: string) => void;
   toAddUser: (newName: string, newNumber: string) => void;
-  
+
   userName: string;
   userBio: string;
 }
@@ -33,12 +33,11 @@ const Settings: React.FC<recentChatProps> = ({
   toChangePhoneNumber,
   toChangeProfileName,
   toShowChatSection,
-  
   toAddUser,
 }) => {
-  const bg = useColorModeValue("#06d755", "#202C33");
+  // const bg = useColorModeValue("#06d755", "#202C33");
 
-  
+  const bg = useColorModeValue("#9A5C9C", "#202C33");
 
   const [showPhoneModal, setShowPhoneModal] = useState(false);
   const [showNameModal, setShowNameModal] = useState(false);
@@ -58,9 +57,8 @@ const Settings: React.FC<recentChatProps> = ({
   };
 
   const addNewUser = (newName: string, newNumber: string) => {
-    toAddUser(newName,newNumber)
-  }
-
+    toAddUser(newName, newNumber);
+  };
 
   const changingProfileName: React.MouseEventHandler = (
     event: React.MouseEvent
@@ -84,7 +82,6 @@ const Settings: React.FC<recentChatProps> = ({
     setUsersModal(true);
   };
 
-  
   interface FormElements extends HTMLFormControlsCollection {
     input: HTMLInputElement;
     Username: HTMLInputElement;
@@ -132,10 +129,21 @@ const Settings: React.FC<recentChatProps> = ({
     event.preventDefault();
     const newName = event.currentTarget.elements.Name.value;
     const newNumber = event.currentTarget.elements.PhoneNumber.value;
-    addNewUser(newName,newNumber);
+    addNewUser(newName, newNumber);
     setUsersModal(false);
   };
 
+  const undoUsersModal: React.MouseEventHandler = (event: React.MouseEvent) => {
+    setUsersModal(false);
+  };
+  const undoUsersBioModal: React.MouseEventHandler = (
+    event: React.MouseEvent
+  ) => {
+    setBioModal(false);
+  };
+  const undoNameModal: React.MouseEventHandler = (event: React.MouseEvent) => {
+    setShowNameModal(false);
+  };
   return (
     <Box className={styles.main__container}>
       {/* Settings Heading */}
@@ -147,18 +155,18 @@ const Settings: React.FC<recentChatProps> = ({
           justifyContent="center"
           alignItems="center"
         >
-          <Button onClick={toShowChatSection}>
+          <Button variant="ghost" onClick={toShowChatSection}>
             <FontAwesomeIcon icon={faArrowLeft} />
           </Button>
         </Box>
 
-        <Box flex="5" display="flex" alignItems="center">
-          <Text fontSize="2xl">Settings</Text>
+        <Box fontSize="2xl" flex="5" display="flex" alignItems="center">
+          <h1>Settings</h1>
         </Box>
       </Flex>
 
       {/* Profile Section */}
-      <Flex flex="1" flexWrap="wrap" >
+      <Flex flex="1" flexWrap="wrap">
         <Flex justifyContent="center" alignItems="center" flex="2" p="10px">
           <Box
             borderRadius="50%"
@@ -174,7 +182,7 @@ const Settings: React.FC<recentChatProps> = ({
       </Flex>
 
       {/* Settings */}
-      <Box flex="6" mt="1rem" pr="0.5rem" >
+      <Box flex="6" mt="1rem" pr="0.5rem">
         {/* <Setting icon={faClone} settingName="Wallpaper Theme"></Setting> */}
         <Setting
           icon={faUser}
@@ -182,6 +190,7 @@ const Settings: React.FC<recentChatProps> = ({
           settingName="Change Name"
         ></Setting>
         <Modal
+          undo={undoNameModal}
           open={showNameModal}
           toClose={closingProfileNameModal}
           inputList={["Username"]}
@@ -196,6 +205,7 @@ const Settings: React.FC<recentChatProps> = ({
           settingName="Change User's Bio"
         ></Setting>
         <Modal
+          undo={undoUsersBioModal}
           open={showBioModal}
           toClose={closingUserBioModal}
           inputList={["Bio"]}
@@ -207,6 +217,7 @@ const Settings: React.FC<recentChatProps> = ({
           settingName="Add New User"
         ></Setting>
         <Modal
+          undo={undoUsersModal}
           open={showUsersModal}
           toClose={closingUsersModal}
           inputList={["Name", "PhoneNumber"]}

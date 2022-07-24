@@ -1,0 +1,41 @@
+.container {
+    position: fixed;
+    height: 100vh;
+    width: 6vw;
+
+    
+    /* background-color: aqua; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightContainer {
+    background-image: linear-gradient(to right,rgba(0,0,0,0.3), rgba(255,255,255, 0.3));
+}
+
+.darkContainer {
+    background-image: linear-gradient(to right,rgba(40,42,55,1),rgb(87, 91, 116));
+}
+
+.c4gtLogo {
+    background-image: url(../../../assets/images/c4gt_logo.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+
+    position: fixed;
+    top: 20px;
+    width: 3rem;
+    height: 5rem;
+}
+
+.settingsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 40vh;
+    width: auto;
+}
