@@ -24,8 +24,8 @@
   font-display: swap;
 }
 
-body {
-  font-family: Mulish-regular;
+/* body {
+  font-family: Mulish-regular !important;
   transition: opacity 200ms;
   position: relative;
   scroll-behavior: smooth;
@@ -51,18 +51,21 @@ a {
 .chat-message {
   z-index: 0;
   position: relative;
-  font-size: 0.87rem;
+  font-size: 1.2rem;
   padding: 10px;
   border-radius: 10px;
-  border: 1.5px #000080 solid;
-  border-radius: 12px 12px 12px 0px;
   font-family: Mulish-regular;
-  color: #000080;
   word-wrap: break-word;
   display: table;
   width: auto !important;
   font-weight: 500;
   margin-left: 25px;
+  background: rgba(82, 251, 82, 0);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 12px 12px 12px 0px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 .chat-message::before {
   content: "";
@@ -75,8 +78,6 @@ a {
 }
 .chat-reciever {
   margin-left: auto;
-  background-color: #000080;
-  color: rgb(255, 255, 255);
   border-radius: 12px 12px 0px 12px;
   display: table;
   margin: 25px 0;
@@ -85,15 +86,14 @@ a {
   content: "";
 }
 
-
-.Toastify__toast-container{
+.Toastify__toast-container {
   top: 50px;
 }
 @media screen and (max-width: 768px) {
   .chat-body {
     width: 100%;
   }
-}
+} */
 /* .chat-footer {
   width: 100%;
   display: flex;
@@ -101,16 +101,21 @@ a {
   align-items: center;
   padding: 0.5rem;
 } */
-.chat-choices {
+/* .chat-choices {
   font-size: 0.9rem;
   padding: 10px;
-  border: 1.5px #000080 solid;
   border-radius: 25px;
   font-family: Mulish-regular;
   margin-bottom: 1rem;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   margin-top: 1rem;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(15.5px);
+  -webkit-backdrop-filter: blur(15.5px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 .chat-choices-container {
   margin-left: 15px;
@@ -120,7 +125,7 @@ a {
 .chat-error-message {
   z-index: 0;
   position: relative;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   padding: 10px;
   border: 1.5px red solid;
   color: red;
@@ -140,7 +145,6 @@ a {
   left: -40px;
   width: 0;
   height: 0;
-  content: url("../assets/images/robot.png");
 }
 
 .chat-body-container::-webkit-scrollbar {
@@ -148,7 +152,6 @@ a {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-
 
 .chat__footer {
   display: flex;
@@ -194,9 +197,9 @@ a {
 .chat__footer > .MuiSvgIcon-root {
   color: gray;
   box-sizing: content-box;
-}
+} */
 
-.chat__footer > form > input {
+/* .chat__footer > form > input {
   height: 44px;
   border-radius: 31px;
   padding-left: 20px;
@@ -209,11 +212,10 @@ a {
   font-family: Roboto, sans-serif;
   transition: all 300ms;
   width: calc(100% - 150px);
-  /*112px 56px*/
-  position: relative;
-}
+  position: relative; 
+} */
 
-.chat__footer > form > input:focus {
+/* .chat__footer > form > input:focus {
   outline: none;
 }
 ::placeholder {
@@ -223,8 +225,7 @@ a {
 
 /*  */
 
-
-::-webkit-scrollbar { 
+/* ::-webkit-scrollbar {
   width: 10px;
   scrollbar-color: #180e644d;
 }
@@ -237,3 +238,24 @@ a {
   border-radius: 10px;
 }
 
+.box-center {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(45deg, #122564, transparent);
+}
+
+@media (max-width: 768px) {
+  .SideBar {
+    display: none;
+  }
+
+  #topBar {
+    width: 100%;
+  }
+
+  #textBar {
+    width: 100%;
+  }
+} */
